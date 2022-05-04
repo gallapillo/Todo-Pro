@@ -1,4 +1,4 @@
-package com.gallapillo.todopro.ui.theme
+package com.gallapillo.todopro.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
