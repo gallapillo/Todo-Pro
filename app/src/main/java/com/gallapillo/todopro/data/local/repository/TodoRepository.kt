@@ -10,4 +10,6 @@ interface TodoRepository {
     suspend fun insertTodo(todo: Todo)
 
     suspend fun deleteTodo(todo: Todo)
+
+    suspend fun updateTodo(todo: Todo)
 }

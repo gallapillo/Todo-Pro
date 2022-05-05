@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                                      )
                                  },
                                  backgroundColor = Primary,
-                                 contentColor = Color.Black,
+                                 contentColor = Color.White,
                                  elevation = 12.dp
                              )
                         },

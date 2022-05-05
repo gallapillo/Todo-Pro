@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gallapillo.todopro.common.Constants
+import com.gallapillo.todopro.common.Constants.TYPE_DATABASE
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.domain.use_case.TodoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,13 +41,18 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun getTodoFromDatabase() {
-        getNotesJob?.cancel()
-        getNotesJob = todoUseCase.getTodos().onEach {  todos ->
-            _state.value = state.value.copy(
-                todos = todos,
-                dbType = Constants.TYPE_DATABASE
-            )
-        }.launchIn(viewModelScope)
+    fun getTodoFromDatabase(type: String, onSuccess: () -> Unit) {
+        when (type) {
+            TYPE_DATABASE -> {
+                getNotesJob?.cancel()
+                getNotesJob = todoUseCase.getTodos().onEach {  todos ->
+                    _state.value = state.value.copy(
+                        todos = todos,
+                        dbType = TYPE_DATABASE
+                    )
+                }.launchIn(viewModelScope)
+                onSuccess()
+            }
+        }
     }
 }

@@ -5,10 +5,7 @@ import androidx.room.Room
 import com.gallapillo.todopro.data.local.TodoDatabase
 import com.gallapillo.todopro.data.local.repository.TodoRepository
 import com.gallapillo.todopro.domain.repository.TodoRepositoryImpl
-import com.gallapillo.todopro.domain.use_case.AddTodoUseCase
-import com.gallapillo.todopro.domain.use_case.GetTodosUseCase
-import com.gallapillo.todopro.domain.use_case.RemoveTodoUseCase
-import com.gallapillo.todopro.domain.use_case.TodoUseCase
+import com.gallapillo.todopro.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,7 +38,8 @@ object AppModule {
         return TodoUseCase(
             getTodos = GetTodosUseCase(repository),
             deleteTodos = RemoveTodoUseCase(repository),
-            addTodo = AddTodoUseCase(repository)
+            addTodo = AddTodoUseCase(repository),
+            updateTodo = UpdateTodoUseCase(repository)
         )
     }
 }

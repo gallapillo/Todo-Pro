@@ -22,9 +22,7 @@ import androidx.navigation.NavHostController
 import com.gallapillo.todopro.common.Screens
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.presentation.TodoViewModel
-import com.gallapillo.todopro.presentation.theme.Background
-import com.gallapillo.todopro.presentation.theme.GoogleSansBold
-import com.gallapillo.todopro.presentation.theme.GoogleSansRegular
+import com.gallapillo.todopro.presentation.theme.*
 
 @Composable
 fun AddScreen(
@@ -50,13 +48,13 @@ fun AddScreen(
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text(text = "Note title", fontFamily = GoogleSansRegular) }
+                label = { Text(text = "Note title", fontFamily = GoogleSansRegular, color = TodoBackground) }
             )
 
             OutlinedTextField(
                 value = subtitle,
                 onValueChange = { subtitle = it },
-                label = { Text(text = "Note subtitle", fontFamily = GoogleSansRegular, color = Background) }
+                label = { Text(text = "Note subtitle", fontFamily = GoogleSansRegular, color = TodoBackground) }
             )
             Button(
                 modifier = Modifier.padding(top = 16.dp),

@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.gallapillo.todopro.common.Constants.TYPE_DATABASE
+import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
 import com.gallapillo.todopro.common.Screens
 import com.gallapillo.todopro.presentation.TodoViewModel
 import com.gallapillo.todopro.presentation.theme.Background
@@ -37,8 +39,9 @@ fun StartScreen(
             )
             Button(
                 onClick = {
-                    viewModel.getTodoFromDatabase()
-                    navHostController.navigate(Screens.Main.route)
+                    viewModel.getTodoFromDatabase(TYPE_DATABASE) {
+                        navHostController.navigate(Screens.Main.route)
+                    }
                 },
                 modifier = Modifier
                     .width(200.dp)
@@ -51,7 +54,9 @@ fun StartScreen(
             }
             Button(
                 onClick = {
-                    navHostController.navigate(Screens.Main.route)
+                    viewModel.getTodoFromDatabase(TYPE_FIREBASE) {
+                        navHostController.navigate(Screens.Main.route)
+                    }
                 },
                 modifier = Modifier
                     .width(200.dp)

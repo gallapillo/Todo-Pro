@@ -19,4 +19,8 @@ class TodoRepositoryImpl(
     override suspend fun deleteTodo(todo: Todo) {
         dao.deleteTodo(todo)
     }
+
+    override suspend fun updateTodo(todo: Todo) {
+        dao.editTodo(todo)
+    }
 }
