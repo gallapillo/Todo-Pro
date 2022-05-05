@@ -13,13 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.gallapillo.todopro.presentation.TodoViewModel
+import com.gallapillo.todopro.presentation.theme.Background
 import com.gallapillo.todopro.presentation.theme.GoogleSansBold
 import com.gallapillo.todopro.presentation.theme.GoogleSansRegular
+import com.gallapillo.todopro.presentation.theme.TodoBackground
 
 @Composable
 fun NoteScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    viewModel: TodoViewModel = hiltViewModel()
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -32,12 +37,13 @@ fun NoteScreen(
             Card(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(32.dp)
+                    .padding(32.dp),
+                backgroundColor = Background
             ) {
                 Column (
                     modifier = Modifier
-                        .padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(vertical = 8.dp, horizontal = 4.dp),
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = "title",

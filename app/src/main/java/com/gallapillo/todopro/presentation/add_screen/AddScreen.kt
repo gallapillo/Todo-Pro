@@ -1,5 +1,6 @@
 package com.gallapillo.todopro.presentation.add_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,14 +17,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.gallapillo.todopro.common.Screens
+import com.gallapillo.todopro.domain.model.Todo
+import com.gallapillo.todopro.presentation.TodoViewModel
+import com.gallapillo.todopro.presentation.theme.Background
 import com.gallapillo.todopro.presentation.theme.GoogleSansBold
 import com.gallapillo.todopro.presentation.theme.GoogleSansRegular
 
 @Composable
 fun AddScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    viewModel: TodoViewModel = hiltViewModel()
 ) {
     var title by remember { mutableStateOf("") }
     var subtitle by remember { mutableStateOf("") }
@@ -50,11 +56,13 @@ fun AddScreen(
             OutlinedTextField(
                 value = subtitle,
                 onValueChange = { subtitle = it },
-                label = { Text(text = "Note subtitle", fontFamily = GoogleSansRegular) }
+                label = { Text(text = "Note subtitle", fontFamily = GoogleSansRegular, color = Background) }
             )
             Button(
                 modifier = Modifier.padding(top = 16.dp),
                 onClick = {
+                    val todo = Todo(title, subtitle)
+                    viewModel.addTodo(todo)
                     navHostController.navigate(Screens.Main.route)
                 }
             ) {

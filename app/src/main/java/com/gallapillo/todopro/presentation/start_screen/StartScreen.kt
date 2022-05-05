@@ -7,16 +7,21 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.gallapillo.todopro.common.Screens
+import com.gallapillo.todopro.presentation.TodoViewModel
 import com.gallapillo.todopro.presentation.theme.Background
 import com.gallapillo.todopro.presentation.theme.GoogleSansRegular
 
 @Composable
 fun StartScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    viewModel: TodoViewModel
 ) {
+    val context = LocalContext.current
+
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         backgroundColor = Background
@@ -32,7 +37,8 @@ fun StartScreen(
             )
             Button(
                 onClick = {
-                   navHostController.navigate(Screens.Main.route)
+                    viewModel.getTodoFromDatabase()
+                    navHostController.navigate(Screens.Main.route)
                 },
                 modifier = Modifier
                     .width(200.dp)
