@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,6 +17,8 @@ import com.gallapillo.todopro.presentation.add_screen.AddScreen
 import com.gallapillo.todopro.presentation.main_screen.MainScreen
 import com.gallapillo.todopro.presentation.note_screen.NoteScreen
 import com.gallapillo.todopro.presentation.start_screen.StartScreen
+import com.gallapillo.todopro.presentation.theme.GoogleSansRegular
+import com.gallapillo.todopro.presentation.theme.Primary
 import com.gallapillo.todopro.presentation.theme.TodoProTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,9 +32,13 @@ class MainActivity : ComponentActivity() {
                         topBar = {
                              TopAppBar(
                                  title = {
-                                     Text(text = "Notes")
+                                     Text(
+                                         text = "Notes",
+                                         modifier = Modifier.padding(top = 12.dp),
+                                         fontFamily = GoogleSansRegular
+                                     )
                                  },
-                                 backgroundColor = Color.Blue,
+                                 backgroundColor = Primary,
                                  contentColor = Color.White,
                                  elevation = 12.dp
                              )
