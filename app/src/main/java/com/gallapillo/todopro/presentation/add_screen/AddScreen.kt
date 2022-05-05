@@ -9,6 +9,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material3.ButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -31,6 +32,7 @@ fun AddScreen(
 ) {
     var title by remember { mutableStateOf("") }
     var subtitle by remember { mutableStateOf("") }
+    var isEnabled by remember { mutableStateOf(false) }
 
     Scaffold {
         Column(
@@ -47,22 +49,31 @@ fun AddScreen(
 
             OutlinedTextField(
                 value = title,
-                onValueChange = { title = it },
-                label = { Text(text = "Note title", fontFamily = GoogleSansRegular, color = TodoBackground) }
+                onValueChange = {
+                    title = it
+                    isEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
+                },
+                label = { Text(text = "Note title", fontFamily = GoogleSansRegular, color = TodoBackground) },
+                isError = title.isEmpty()
             )
 
             OutlinedTextField(
                 value = subtitle,
-                onValueChange = { subtitle = it },
-                label = { Text(text = "Note subtitle", fontFamily = GoogleSansRegular, color = TodoBackground) }
+                onValueChange = {
+                    subtitle = it
+                    isEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
+                },
+                label = { Text(text = "Note subtitle", fontFamily = GoogleSansRegular, color = TodoBackground) },
+                isError = subtitle.isEmpty()
             )
-            Button(
+            androidx.compose.material3.Button(
                 modifier = Modifier.padding(top = 16.dp),
                 onClick = {
                     val todo = Todo(title, subtitle)
                     viewModel.addTodo(todo)
                     navHostController.navigate(Screens.Main.route)
-                }
+                },
+                enabled = isEnabled
             ) {
                 Text(text = "Add note", fontFamily = GoogleSansRegular)
             }

@@ -9,3 +9,12 @@ val Teal200 = Color(0xFF03DAC5)
 val Background = Color(0xFF201B1A)
 val Primary = Color(0xFFFAA2A4)
 val TodoBackground = Color(0xFFF8DBD9)
+val TodoBackground2 = Color(0xFFF7E5D5)
+val TodoBackground3 = Color(0xFFFADEAD)
+
+val ColorsDecks = listOf<Color>(
+    Primary,
+    TodoBackground,
+    TodoBackground2,
+    TodoBackground3
+)

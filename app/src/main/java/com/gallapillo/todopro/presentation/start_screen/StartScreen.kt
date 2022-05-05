@@ -37,7 +37,7 @@ fun StartScreen(
                 text = "What will you use?",
                 fontFamily = GoogleSansRegular
             )
-            Button(
+            androidx.compose.material3.Button(
                 onClick = {
                     viewModel.getTodoFromDatabase(TYPE_DATABASE) {
                         navHostController.navigate(Screens.Main.route)
@@ -52,7 +52,7 @@ fun StartScreen(
                     fontFamily = GoogleSansRegular
                 )
             }
-            Button(
+            androidx.compose.material3.Button(
                 onClick = {
                     viewModel.getTodoFromDatabase(TYPE_FIREBASE) {
                         navHostController.navigate(Screens.Main.route)

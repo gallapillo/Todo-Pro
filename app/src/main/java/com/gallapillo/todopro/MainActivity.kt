@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                                      Text(
                                          text = "Todo Pro",
                                          fontSize = 32.sp,
-                                         modifier = Modifier.padding(top = 12.dp),
+                                         modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
                                          fontFamily = GoogleSansRegular
                                      )
                                  },
