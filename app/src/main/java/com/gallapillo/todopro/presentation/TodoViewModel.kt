@@ -6,11 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gallapillo.todopro.common.Constants
 import com.gallapillo.todopro.common.Constants.TYPE_DATABASE
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.domain.use_case.TodoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,6 +53,24 @@ class TodoViewModel @Inject constructor(
                         dbType = TYPE_DATABASE
                     )
                 }.launchIn(viewModelScope)
+                onSuccess()
+            }
+        }
+    }
+
+    fun updateTodo(todo: Todo, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            todoUseCase.updateTodo(todo)
+            viewModelScope.launch(Dispatchers.IO) {
+                onSuccess()
+            }
+        }
+    }
+
+    fun deleteTodo(todo: Todo, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            todoUseCase.deleteTodos(todo)
+            viewModelScope.launch(Dispatchers.IO) {
                 onSuccess()
             }
         }

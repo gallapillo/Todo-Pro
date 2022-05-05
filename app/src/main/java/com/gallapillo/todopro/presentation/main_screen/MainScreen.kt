@@ -63,9 +63,8 @@ fun TodoCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp, horizontal = 24.dp)
-            .shadow(15.dp, CircleShape)
             .clickable {
-                navHostController.navigate(Screens.Note.route)
+                navHostController.navigate(Screens.Note.route + "/${todo.id.toString()}")
             },
         elevation = 4.dp,
         backgroundColor = ColorsDecks[todo.color]

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "893308762881",
+    "project_id": "todopro-8834e",
+    "storage_bucket": "todopro-8834e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893308762881:android:60ecd3f1342e28513a7900",
+        "android_client_info": {
+          "package_name": "com.gallapillo.todopro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893308762881-mtg945pg32bdcd5pa3n45v6ek8f2efq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwEIff2fnC7XnO26WoEv6lpBtfE57W9DI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893308762881-mtg945pg32bdcd5pa3n45v6ek8f2efq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,6 +26,7 @@ import com.gallapillo.todopro.presentation.theme.TodoProTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@ExperimentalMaterialApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +66,8 @@ class MainActivity : ComponentActivity() {
                                     composable(Screens.Add.route) {
                                         AddScreen(navHostController = navController)
                                     }
-                                    composable(Screens.Note.route) {
-                                        NoteScreen(navHostController = navController)
+                                    composable(Screens.Note.route + "/{Id}") { backStackEntry ->
+                                        NoteScreen(navHostController = navController, viewModel = viewModel, id = backStackEntry.arguments?.getString("Id") ?: "1")
                                     }
                                 }
                             }

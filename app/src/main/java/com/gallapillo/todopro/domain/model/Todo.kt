@@ -8,6 +8,6 @@ import kotlin.random.Random
 data class Todo (
     val title: String,
     val subtitle: String,
-    val color: Int = Random.nextInt(0, 3),
+    val color: Int = Random.nextInt(0, 8),
     @PrimaryKey val id: Int? = null
 )
