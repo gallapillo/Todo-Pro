@@ -12,7 +12,7 @@ interface FirebaseTodoRepository {
 
     suspend fun addTodoFirebase(todo: Todo, onSuccess: () -> Unit)
 
-    fun updateTodoFirebase(todo: Todo, onSuccess: () -> Unit)
+    suspend fun updateTodoFirebase(todo: Todo, onSuccess: () -> Unit)
 
-    fun removeTodoFirebase(todo: Todo, onSuccess: () -> Unit)
+    suspend fun removeTodoFirebase(todo: Todo, onSuccess: () -> Unit)
 }

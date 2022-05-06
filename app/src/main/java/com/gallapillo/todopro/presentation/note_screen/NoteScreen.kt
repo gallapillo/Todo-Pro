@@ -41,7 +41,8 @@ fun NoteScreen(
             todos.firstOrNull { it.id == id.toInt() } ?: Todo(title = "Hello", subtitle = "World")
         }
         TYPE_FIREBASE -> {
-            todos.firstOrNull { it.firebaseId == id } ?: Todo(title = "Hello", subtitle = "World") }
+            todos.firstOrNull { it.firebaseId == id } ?: Todo(title = "Hello", subtitle = "World")
+        }
         else -> Todo(title = "Hello", subtitle = "World")
     }
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -86,10 +87,28 @@ fun NoteScreen(
                     )
                     androidx.compose.material3.Button(
                         onClick = {
-                            viewModel.updateTodo(
-                                todo = Todo(title = title, subtitle = subtitle, color = todo.color, id = todo.id, firebaseId = todo.firebaseId)
-                            ) {
-                                navHostController.navigate(Screens.Main.route + "/$dbType")
+                            when (dbType) {
+                                TYPE_ROOM -> {
+                                    viewModel.updateTodo(
+                                        todo = Todo(title = title, subtitle = subtitle, color = todo.color, id = todo.id, firebaseId = todo.firebaseId)
+                                    ) {
+                                        navHostController.navigate(Screens.Main.route + "/$dbType")
+                                    }
+                                }
+                                TYPE_FIREBASE -> {
+                                    viewModel.updateFirebaseTodo(
+                                        todo = Todo(title = title, subtitle = subtitle, color = todo.color, id = todo.id, firebaseId = todo.firebaseId)
+                                    ) {
+                                        navHostController.navigate(Screens.Main.route + "/$dbType")
+                                    }
+                                }
+                                else -> {
+                                    viewModel.updateFirebaseTodo(
+                                        todo = Todo(title = title, subtitle = subtitle, color = todo.color, id = todo.id, firebaseId = todo.firebaseId)
+                                    ) {
+                                        navHostController.navigate(Screens.Main.route + "/$dbType")
+                                    }
+                                }
                             }
                         }
                     ) {
@@ -153,8 +172,22 @@ fun NoteScreen(
                     }
                     androidx.compose.material3.Button(
                         onClick = {
-                            viewModel.deleteTodo(todo) {
-                                navHostController.navigate(Screens.Main.route + "/$dbType")
+                            when(dbType) {
+                                TYPE_ROOM -> {
+                                    viewModel.deleteTodo(todo) {
+                                        navHostController.navigate(Screens.Main.route + "/$dbType")
+                                    }
+                                }
+                                TYPE_FIREBASE -> {
+                                    viewModel.removeFirebaseTodo(todo) {
+                                        navHostController.navigate(Screens.Main.route + "/$dbType")
+                                    }
+                                }
+                                else -> {
+                                    viewModel.deleteTodo(todo) {
+                                        navHostController.navigate(Screens.Main.route + "/$dbType")
+                                    }
+                                }
                             }
                         }
                     ) {

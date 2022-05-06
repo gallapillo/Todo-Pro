@@ -13,9 +13,7 @@ import com.gallapillo.todopro.domain.use_case.database.*
 import com.gallapillo.todopro.domain.use_case.firebase.FirebaseConnectUseCase
 import com.gallapillo.todopro.domain.use_case.firebase.FirebaseSignOutUseCase
 import com.gallapillo.todopro.domain.use_case.firebase.FirebaseUseCase
-import com.gallapillo.todopro.domain.use_case.firebase_todo.FirebaseAddTodoUseCase
-import com.gallapillo.todopro.domain.use_case.firebase_todo.FirebaseGetAllTodoUseCase
-import com.gallapillo.todopro.domain.use_case.firebase_todo.FirebaseTodoUseCase
+import com.gallapillo.todopro.domain.use_case.firebase_todo.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -101,7 +99,9 @@ object AppModule {
     fun provideFirebaseTodoUseCase(repository: FirebaseTodoRepository): FirebaseTodoUseCase {
         return FirebaseTodoUseCase(
             getAllTodoUseCase = FirebaseGetAllTodoUseCase(repository = repository),
-            addTodoUseCase = FirebaseAddTodoUseCase(repository = repository)
+            addTodoUseCase = FirebaseAddTodoUseCase(repository = repository),
+            updateTodoUseCase = FirebaseUpdateTodoUseCase(repository = repository),
+            removeTodoUseCase = FirebaseRemoveTodoUseCase(repository = repository)
         )
     }
 }

@@ -82,7 +82,7 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun getTodoFromFirebaseDatabase() {
+    private fun getTodoFromFirebaseDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             getNotesJob?.cancel()
             getNotesJob = firebaseTodoUseCase.getAllTodoUseCase().onEach {  todos ->
@@ -99,6 +99,26 @@ class TodoViewModel @Inject constructor(
             todoUseCase.deleteTodos(todo)
             viewModelScope.launch(Dispatchers.Main) {
                 onSuccess()
+            }
+        }
+    }
+
+    fun removeFirebaseTodo(todo: Todo, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            firebaseTodoUseCase.removeTodoUseCase(todo) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
+            }
+        }
+    }
+
+    fun updateFirebaseTodo(todo: Todo, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            firebaseTodoUseCase.updateTodoUseCase(todo) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
             }
         }
     }

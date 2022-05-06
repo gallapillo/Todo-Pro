@@ -63,12 +63,41 @@ class FirebaseTodoRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun updateTodoFirebase(todo: Todo, onSuccess: () -> Unit) {
-        // TODO("Not yet implemented")
+    override suspend fun updateTodoFirebase(todo: Todo, onSuccess: () -> Unit) {
+        val database = firebaseDatabase.database.reference
+            .child(auth.currentUser?.uid.toString())
+        val todoId = todo.firebaseId
+        val mapTodos = hashMapOf<String, Any>()
+
+        mapTodos["firebaseId"] = todoId ?: "Id"
+        mapTodos["title"] = todo.title
+        mapTodos["subtitle"] = todo.subtitle
+        mapTodos["color"] = todo.color
+
+        if (todoId != null) {
+            database.child(todoId)
+                .updateChildren(mapTodos)
+                .addOnSuccessListener {
+                    onSuccess()
+                }
+                .addOnFailureListener {
+
+                }
+        }
     }
 
-    override fun removeTodoFirebase(todo: Todo, onSuccess: () -> Unit) {
-        // TODO("Not yet implemented")
+    override suspend fun removeTodoFirebase(todo: Todo, onSuccess: () -> Unit) {
+        val database = firebaseDatabase.database.reference
+            .child(auth.currentUser?.uid.toString())
+
+        todo.firebaseId?.let {
+            database.child(it).removeValue()
+                .addOnSuccessListener {
+                    onSuccess()
+            }.addOnFailureListener {
+
+            }
+        }
     }
 
 }
