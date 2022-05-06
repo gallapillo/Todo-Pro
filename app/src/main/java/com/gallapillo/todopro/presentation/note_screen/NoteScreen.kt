@@ -1,5 +1,6 @@
 package com.gallapillo.todopro.presentation.note_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +39,7 @@ fun NoteScreen(
     var title by remember { mutableStateOf("") }
     var subtitle by remember { mutableStateOf("") }
 
+    val context = LocalContext.current
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -69,13 +72,15 @@ fun NoteScreen(
                         value = subtitle,
                         onValueChange = { subtitle = it },
                         label = {
-                            Text(text = "title")
+                            Text(text = "subtitle")
                         },
                         isError = title.isEmpty()
                     )
                     androidx.compose.material3.Button(
                         onClick = {
-                            viewModel.updateTodo(Todo(title, subtitle)) {
+                            viewModel.updateTodo(
+                                todo = Todo(title = title, subtitle = subtitle, color = todo.color, id = todo.id)
+                            ) {
                                 navHostController.navigate(Screens.Main.route)
                             }
                         }
@@ -86,69 +91,67 @@ fun NoteScreen(
             }
         }
     ) {
-        
-    }
-
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Scaffold(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp),
-                backgroundColor = ColorsDecks[todo.color],
-                elevation = 8.dp
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column (
+                Card(
                     modifier = Modifier
-                        .padding(vertical = 8.dp, horizontal = 4.dp),
-                    horizontalAlignment = Alignment.Start
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    backgroundColor = ColorsDecks[todo.color],
+                    elevation = 8.dp
                 ) {
-                    Text(
-                        text = todo.title,
-                        fontSize = 24.sp,
-                        fontFamily = GoogleSansBold,
-                        modifier = Modifier.padding(top = 32.dp)
-                    )
-                    Text(
-                        text = todo.subtitle,
-                        fontSize = 18.sp,
-                        fontFamily = GoogleSansRegular,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                androidx.compose.material3.Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            title = todo.title
-                            subtitle = todo.subtitle
-                            bottomSheetState.show()
-                        }
+                    Column (
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 4.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            text = todo.title,
+                            fontSize = 24.sp,
+                            fontFamily = GoogleSansBold,
+                            modifier = Modifier.padding(top = 32.dp)
+                        )
+                        Text(
+                            text = todo.subtitle,
+                            fontSize = 18.sp,
+                            fontFamily = GoogleSansRegular,
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
                     }
-                ) {
-                    Text(text = "Update")
                 }
-                androidx.compose.material3.Button(
-                    onClick = {
-                        viewModel.deleteTodo(todo) {
-                            navHostController.navigate(Screens.Main.route)
-                        }
-                    }
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 32.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    Text(text = "Remove")
+                    androidx.compose.material3.Button(
+                        onClick = {
+                            coroutineScope.launch {
+                                title = todo.title
+                                subtitle = todo.subtitle
+                                bottomSheetState.show()
+                            }
+                        }
+                    ) {
+                        Text(text = "Update")
+                    }
+                    androidx.compose.material3.Button(
+                        onClick = {
+                            viewModel.deleteTodo(todo) {
+                                navHostController.navigate(Screens.Main.route)
+                            }
+                        }
+                    ) {
+                        Text(text = "Remove")
+                    }
                 }
             }
         }

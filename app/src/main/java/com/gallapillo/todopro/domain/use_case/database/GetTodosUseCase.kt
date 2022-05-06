@@ -1,4 +1,4 @@
-package com.gallapillo.todopro.domain.use_case
+package com.gallapillo.todopro.domain.use_case.database
 
 import com.gallapillo.todopro.data.local.repository.TodoRepository
 import com.gallapillo.todopro.domain.model.Todo

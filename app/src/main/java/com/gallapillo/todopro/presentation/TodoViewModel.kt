@@ -1,16 +1,14 @@
 package com.gallapillo.todopro.presentation
 
-import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.gallapillo.todopro.common.Constants
 import com.gallapillo.todopro.common.Constants.TYPE_DATABASE
+import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
 import com.gallapillo.todopro.domain.model.Todo
-import com.gallapillo.todopro.domain.use_case.TodoUseCase
+import com.gallapillo.todopro.domain.use_case.database.TodoUseCase
+import com.gallapillo.todopro.domain.use_case.firebase.FirebaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,12 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoViewModel @Inject constructor(
-    private val todoUseCase: TodoUseCase
+    private val todoUseCase: TodoUseCase,
+    private val firebaseUseCase: FirebaseUseCase
 ) : ViewModel() {
     private val _state = mutableStateOf(TodoState())
     val state: State<TodoState> = _state
-
-    private var recentlyDeletedNote: Todo? = null
 
     private var getNotesJob: Job? = null
 
@@ -34,12 +31,6 @@ class TodoViewModel @Inject constructor(
     fun addTodo(todo: Todo) {
         viewModelScope.launch {
             todoUseCase.addTodo(todo)
-        }
-    }
-
-    fun deleteTodo(todo: Todo) {
-        viewModelScope.launch {
-            todoUseCase.deleteTodos(todo)
         }
     }
 
@@ -58,19 +49,32 @@ class TodoViewModel @Inject constructor(
         }
     }
 
+    fun getTodoFromFirebase(
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        firebaseUseCase.firebaseConnect(email, password, {
+            onSuccess()
+        }, {
+            onFailure
+        })
+    }
+
     fun updateTodo(todo: Todo, onSuccess: () -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             todoUseCase.updateTodo(todo)
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(Dispatchers.Main) {
                 onSuccess()
             }
         }
     }
 
     fun deleteTodo(todo: Todo, onSuccess: () -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             todoUseCase.deleteTodos(todo)
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(Dispatchers.Main) {
                 onSuccess()
             }
         }

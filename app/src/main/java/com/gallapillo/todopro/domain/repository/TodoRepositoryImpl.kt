@@ -21,6 +21,6 @@ class TodoRepositoryImpl(
     }
 
     override suspend fun updateTodo(todo: Todo) {
-        dao.editTodo(todo)
+        dao.updateTodo(todo)
     }
 }

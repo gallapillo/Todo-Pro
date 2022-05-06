@@ -1,4 +1,4 @@
-package com.gallapillo.todopro.domain.use_case
+package com.gallapillo.todopro.domain.use_case.database
 
 data class TodoUseCase (
     val getTodos: GetTodosUseCase,

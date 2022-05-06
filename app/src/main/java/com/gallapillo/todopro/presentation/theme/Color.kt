@@ -11,12 +11,12 @@ val Primary = Color(0xFFFAA2A4)
 val TodoBackground = Color(0xFFF8DBD9)
 val TodoBackground2 = Color(0xFFF7E5D5)
 val TodoBackground3 = Color(0xFFFADEAD)
-val TodoBackground4 = Color(0xfa9be2)
-val TodoBackground5 = Color(0xfc839a)
-val TodoBackground6 = Color(0xf5bac5)
-val TodoBackground7 = Color(0xf5bae6)
-val TodoBackground8 = Color(0xffc4cf)
-val TodoBackground9 = Color(0xe8a5b1)
+val TodoBackground4 = Color(0xFFFA9BE2)
+val TodoBackground5 = Color(0xFFFC839A)
+val TodoBackground6 = Color(0xFFF5BAC5)
+val TodoBackground7 = Color(0xFFF5BAE6)
+val TodoBackground8 = Color(0xFFFFC4CF)
+val TodoBackground9 = Color(0xFFE8A5B1)
 
 
 val ColorsDecks = listOf<Color>(
