@@ -11,10 +11,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.gallapillo.todopro.common.Constants.TYPE_DATABASE
 import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
+import com.gallapillo.todopro.common.Constants.TYPE_ROOM
 import com.gallapillo.todopro.common.Screens
-import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.presentation.TodoViewModel
 import com.gallapillo.todopro.presentation.theme.Background
 import com.gallapillo.todopro.presentation.theme.GoogleSansBold
@@ -31,6 +30,8 @@ fun StartScreen(
     val coroutineScope = rememberCoroutineScope()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var dbType by remember { mutableStateOf("") }
 
     val context = LocalContext.current
 
@@ -72,9 +73,10 @@ fun StartScreen(
                     androidx.compose.material3.Button(
                         onClick = {
                             viewModel.getTodoFromFirebase(email, password, {
-                                navHostController.navigate(Screens.Main.route)
+                                dbType = TYPE_FIREBASE
+                                navHostController.navigate(Screens.Main.route + "/$dbType")
                             }) {
-                                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+
                             }
                         },
                         enabled = email.isNotEmpty() && password.isNotEmpty()
@@ -100,8 +102,9 @@ fun StartScreen(
                 )
                 androidx.compose.material3.Button(
                     onClick = {
-                        viewModel.getTodoFromDatabase(TYPE_DATABASE) {
-                            navHostController.navigate(Screens.Main.route)
+                        viewModel.getTodoFromDatabase(TYPE_ROOM) {
+                            dbType = TYPE_ROOM
+                            navHostController.navigate(Screens.Main.route + "/$dbType")
                         }
                     },
                     modifier = Modifier

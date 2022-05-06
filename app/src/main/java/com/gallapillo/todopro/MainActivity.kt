@@ -60,14 +60,14 @@ class MainActivity : ComponentActivity() {
                                     composable(Screens.Start.route) {
                                         StartScreen(navHostController = navController, viewModel = viewModel)
                                     }
-                                    composable(Screens.Main.route) {
-                                        MainScreen(navHostController = navController, viewModel = viewModel)
+                                    composable(Screens.Main.route + "/{DbType}") { backStackEntry ->
+                                        MainScreen(navHostController = navController, viewModel = viewModel, dbType = backStackEntry.arguments?.getString("DbType") ?: "")
                                     }
-                                    composable(Screens.Add.route) {
-                                        AddScreen(navHostController = navController)
+                                    composable(Screens.Add.route  + "/{DbType}") { backStackEntry ->
+                                        AddScreen(navHostController = navController, viewModel = viewModel, dbType = backStackEntry.arguments?.getString("DbType") ?: "")
                                     }
-                                    composable(Screens.Note.route + "/{Id}") { backStackEntry ->
-                                        NoteScreen(navHostController = navController, viewModel = viewModel, id = backStackEntry.arguments?.getString("Id") ?: "1")
+                                    composable(Screens.Note.route + "/{Id}/{DbType}") { backStackEntry ->
+                                        NoteScreen(navHostController = navController, viewModel = viewModel, id = backStackEntry.arguments?.getString("Id") ?: "1", dbType = backStackEntry.arguments?.getString("DbType") ?: "")
                                     }
                                 }
                             }

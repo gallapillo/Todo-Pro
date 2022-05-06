@@ -4,11 +4,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gallapillo.todopro.common.Constants.TYPE_DATABASE
-import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
+import com.gallapillo.todopro.common.Constants.TYPE_ROOM
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.domain.use_case.database.TodoUseCase
 import com.gallapillo.todopro.domain.use_case.firebase.FirebaseUseCase
+import com.gallapillo.todopro.domain.use_case.firebase_todo.FirebaseTodoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TodoViewModel @Inject constructor(
     private val todoUseCase: TodoUseCase,
-    private val firebaseUseCase: FirebaseUseCase
+    private val firebaseUseCase: FirebaseUseCase,
+    private val firebaseTodoUseCase: FirebaseTodoUseCase
 ) : ViewModel() {
     private val _state = mutableStateOf(TodoState())
     val state: State<TodoState> = _state
@@ -34,14 +35,23 @@ class TodoViewModel @Inject constructor(
         }
     }
 
+    fun addTodoFirebase(todo: Todo, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            firebaseTodoUseCase.addTodoUseCase(todo)
+            viewModelScope.launch(Dispatchers.Main) {
+                onSuccess()
+            }
+        }
+    }
+
     fun getTodoFromDatabase(type: String, onSuccess: () -> Unit) {
         when (type) {
-            TYPE_DATABASE -> {
+            TYPE_ROOM -> {
                 getNotesJob?.cancel()
                 getNotesJob = todoUseCase.getTodos().onEach {  todos ->
                     _state.value = state.value.copy(
                         todos = todos,
-                        dbType = TYPE_DATABASE
+                        dbType = TYPE_ROOM
                     )
                 }.launchIn(viewModelScope)
                 onSuccess()
@@ -57,6 +67,7 @@ class TodoViewModel @Inject constructor(
     ) {
         firebaseUseCase.firebaseConnect(email, password, {
             onSuccess()
+            getTodoFromFirebaseDatabase()
         }, {
             onFailure
         })
@@ -68,6 +79,18 @@ class TodoViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.Main) {
                 onSuccess()
             }
+        }
+    }
+
+    fun getTodoFromFirebaseDatabase() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getNotesJob?.cancel()
+            getNotesJob = firebaseTodoUseCase.getAllTodoUseCase().onEach {  todos ->
+                _state.value = state.value.copy(
+                    todos = todos,
+                    dbType = TYPE_ROOM
+                )
+            }.launchIn(viewModelScope)
         }
     }
 

@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
+import com.gallapillo.todopro.common.Constants.TYPE_ROOM
 import com.gallapillo.todopro.common.Screens
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.presentation.TodoViewModel
@@ -25,14 +27,15 @@ import com.gallapillo.todopro.presentation.theme.*
 @Composable
 fun MainScreen(
     navHostController: NavHostController,
-    viewModel: TodoViewModel = hiltViewModel()
+    viewModel: TodoViewModel = hiltViewModel(),
+    dbType: String
 ) {
     val state = viewModel.state.value
     Scaffold(
         floatingActionButton = {
             androidx.compose.material3.FloatingActionButton(
                 onClick = {
-                    navHostController.navigate(Screens.Add.route)
+                    navHostController.navigate(Screens.Add.route + "/$dbType")
                 },
                 containerColor = TodoBackground,
                 contentColor = Color.White
@@ -47,7 +50,8 @@ fun MainScreen(
             items(state.todos) { todo ->
                 TodoCard(
                     todo = todo,
-                    navHostController = navHostController
+                    navHostController = navHostController,
+                    dbType = dbType
                 )
             }
         }
@@ -57,14 +61,22 @@ fun MainScreen(
 @Composable
 fun TodoCard(
     todo: Todo,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    dbType: String,
 ) {
+
+    val todoId = when(dbType) {
+        TYPE_FIREBASE -> todo.firebaseId
+        TYPE_ROOM -> todo.id
+        else -> ""
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp, horizontal = 24.dp)
             .clickable {
-                navHostController.navigate(Screens.Note.route + "/${todo.id.toString()}")
+                navHostController.navigate(Screens.Note.route + "/${todoId.toString()}" + "/$dbType")
             },
         elevation = 4.dp,
         backgroundColor = ColorsDecks[todo.color]

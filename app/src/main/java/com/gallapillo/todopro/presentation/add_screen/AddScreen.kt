@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
+import com.gallapillo.todopro.common.Constants.TYPE_ROOM
 import com.gallapillo.todopro.common.Screens
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.presentation.TodoViewModel
@@ -28,7 +30,8 @@ import com.gallapillo.todopro.presentation.theme.*
 @Composable
 fun AddScreen(
     navHostController: NavHostController,
-    viewModel: TodoViewModel = hiltViewModel()
+    viewModel: TodoViewModel = hiltViewModel(),
+    dbType: String
 ) {
     var title by remember { mutableStateOf("") }
     var subtitle by remember { mutableStateOf("") }
@@ -41,7 +44,7 @@ fun AddScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Add new note",
+                text = "Add new todo",
                 fontSize = 18.sp,
                 fontFamily = GoogleSansBold,
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -53,7 +56,7 @@ fun AddScreen(
                     title = it
                     isEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                 },
-                label = { Text(text = "Note title", fontFamily = GoogleSansRegular, color = TodoBackground) },
+                label = { Text(text = "Todo title", fontFamily = GoogleSansRegular, color = TodoBackground) },
                 isError = title.isEmpty()
             )
 
@@ -63,19 +66,30 @@ fun AddScreen(
                     subtitle = it
                     isEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                 },
-                label = { Text(text = "Note subtitle", fontFamily = GoogleSansRegular, color = TodoBackground) },
+                label = { Text(text = "Todo subtitle", fontFamily = GoogleSansRegular, color = TodoBackground) },
                 isError = subtitle.isEmpty()
             )
             androidx.compose.material3.Button(
                 modifier = Modifier.padding(top = 16.dp),
                 onClick = {
                     val todo = Todo(title, subtitle)
-                    viewModel.addTodo(todo)
-                    navHostController.navigate(Screens.Main.route)
+                    when (dbType) {
+                        TYPE_ROOM -> {
+                            viewModel.addTodo(todo)
+                            navHostController.navigate(Screens.Main.route + "/$dbType")
+                        }
+                        TYPE_FIREBASE -> {
+                            viewModel.addTodoFirebase(todo) {
+                                navHostController.navigate(Screens.Main.route + "/$dbType")
+                            }
+                        }
+                        else -> { viewModel.addTodo(todo) }
+                    }
+
                 },
                 enabled = isEnabled
             ) {
-                Text(text = "Add note", fontFamily = GoogleSansRegular)
+                Text(text = "Add Todo", fontFamily = GoogleSansRegular)
             }
         }
     }

@@ -3,15 +3,24 @@ package com.gallapillo.todopro.di
 import android.app.Application
 import androidx.room.Room
 import com.gallapillo.todopro.data.firebase.repository.FirebaseRepository
+import com.gallapillo.todopro.data.firebase.repository.FirebaseTodoRepository
 import com.gallapillo.todopro.data.local.TodoDatabase
 import com.gallapillo.todopro.data.local.repository.TodoRepository
 import com.gallapillo.todopro.domain.repository.FirebaseRepositoryImpl
+import com.gallapillo.todopro.domain.repository.FirebaseTodoRepositoryImpl
 import com.gallapillo.todopro.domain.repository.TodoRepositoryImpl
 import com.gallapillo.todopro.domain.use_case.database.*
 import com.gallapillo.todopro.domain.use_case.firebase.FirebaseConnectUseCase
 import com.gallapillo.todopro.domain.use_case.firebase.FirebaseSignOutUseCase
 import com.gallapillo.todopro.domain.use_case.firebase.FirebaseUseCase
+import com.gallapillo.todopro.domain.use_case.firebase_todo.FirebaseAddTodoUseCase
+import com.gallapillo.todopro.domain.use_case.firebase_todo.FirebaseGetAllTodoUseCase
+import com.gallapillo.todopro.domain.use_case.firebase_todo.FirebaseTodoUseCase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,6 +64,12 @@ object AppModule {
         return FirebaseAuth.getInstance()
     }
 
+    @Singleton
+    @Provides
+    fun provideFirebaseDatabase(): Firebase {
+        return Firebase
+    }
+
     @Provides
     @Singleton
     fun provideFirebaseRepository(auth: FirebaseAuth): FirebaseRepository {
@@ -69,6 +84,24 @@ object AppModule {
         return FirebaseUseCase(
             firebaseConnect = FirebaseConnectUseCase(repository),
             firebaseSignOut = FirebaseSignOutUseCase(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseTodoRepository(firebaseDatabase: Firebase, auth: FirebaseAuth): FirebaseTodoRepository {
+        return FirebaseTodoRepositoryImpl(
+            firebaseDatabase = firebaseDatabase,
+            auth = auth
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseTodoUseCase(repository: FirebaseTodoRepository): FirebaseTodoUseCase {
+        return FirebaseTodoUseCase(
+            getAllTodoUseCase = FirebaseGetAllTodoUseCase(repository = repository),
+            addTodoUseCase = FirebaseAddTodoUseCase(repository = repository)
         )
     }
 }

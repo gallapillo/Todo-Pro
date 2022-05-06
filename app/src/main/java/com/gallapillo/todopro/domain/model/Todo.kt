@@ -6,8 +6,9 @@ import kotlin.random.Random
 
 @Entity
 data class Todo (
-    val title: String,
-    val subtitle: String,
+    val title: String = "Hello",
+    val subtitle: String = "World",
     val color: Int = Random.nextInt(0, 8),
+    val firebaseId: String? = null,
     @PrimaryKey val id: Int? = null
 )

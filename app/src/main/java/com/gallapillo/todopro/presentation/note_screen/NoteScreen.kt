@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
+import com.gallapillo.todopro.common.Constants.TYPE_ROOM
 import com.gallapillo.todopro.common.Screens
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.presentation.TodoViewModel
@@ -30,16 +32,22 @@ import kotlinx.coroutines.launch
 fun NoteScreen(
     navHostController: NavHostController,
     viewModel: TodoViewModel = hiltViewModel(),
-    id: String
+    id: String,
+    dbType: String
 ) {
     val todos = viewModel.state.value.todos
-    val todo = todos.firstOrNull { it.id == id.toInt() } ?: Todo(title = "Hello", subtitle = "World")
+    val todo = when(dbType) {
+        TYPE_ROOM -> {
+            todos.firstOrNull { it.id == id.toInt() } ?: Todo(title = "Hello", subtitle = "World")
+        }
+        TYPE_FIREBASE -> {
+            todos.firstOrNull { it.firebaseId == id } ?: Todo(title = "Hello", subtitle = "World") }
+        else -> Todo(title = "Hello", subtitle = "World")
+    }
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var title by remember { mutableStateOf("") }
     var subtitle by remember { mutableStateOf("") }
-
-    val context = LocalContext.current
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -79,9 +87,9 @@ fun NoteScreen(
                     androidx.compose.material3.Button(
                         onClick = {
                             viewModel.updateTodo(
-                                todo = Todo(title = title, subtitle = subtitle, color = todo.color, id = todo.id)
+                                todo = Todo(title = title, subtitle = subtitle, color = todo.color, id = todo.id, firebaseId = todo.firebaseId)
                             ) {
-                                navHostController.navigate(Screens.Main.route)
+                                navHostController.navigate(Screens.Main.route + "/$dbType")
                             }
                         }
                     ) {
@@ -146,7 +154,7 @@ fun NoteScreen(
                     androidx.compose.material3.Button(
                         onClick = {
                             viewModel.deleteTodo(todo) {
-                                navHostController.navigate(Screens.Main.route)
+                                navHostController.navigate(Screens.Main.route + "/$dbType")
                             }
                         }
                     ) {
