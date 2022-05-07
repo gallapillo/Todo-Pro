@@ -1,9 +1,11 @@
 package com.gallapillo.todopro.presentation
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gallapillo.todopro.common.Constants.TYPE_FIREBASE
 import com.gallapillo.todopro.common.Constants.TYPE_ROOM
 import com.gallapillo.todopro.domain.model.Todo
 import com.gallapillo.todopro.domain.use_case.database.TodoUseCase
@@ -119,6 +121,21 @@ class TodoViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.Main) {
                     onSuccess()
                 }
+            }
+        }
+    }
+
+    fun signOut(dbType: String, onSuccess: () -> Unit) {
+        when (dbType) {
+            TYPE_ROOM -> {
+
+            }
+            TYPE_FIREBASE -> {
+                firebaseUseCase.firebaseSignOut()
+                onSuccess()
+            }
+            else -> {
+                Log.d("Exit", "Exit form database else")
             }
         }
     }
